@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>测试</title>
+		<link href="leaflet/leaflet.css" type="text/css" rel="stylesheet" />
+		<script src="leaflet/leaflet.js"></script>
+		<script src="leaflet/leaflet.ChineseTmsProviders.js"></script>
+		<script src="js/map_control.js"></script>
+		<script src="js/jQuery.js"></script>
+		<script src="js/MarkerMove.js"></script>
+		<script src="js/Timeline.js"></script>
+		<script src="js/Leaflet.Marker.SlideTo.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<link href="./css/timeline.css" rel="stylesheet">
+		<link href="./css/tuli.css" rel="stylesheet">
+		<style type="text/css">
+			html,
+			body,
+			#map {
+				padding: 0;
+				margin: 0;
+				height: 100%;
+				width: 100%;
+				z-index: 0;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			a {
+				color: #777;
+				text-decoration: none;
+				outline: none;
+			}
+
+			ol,
+			ul,
+			li {
+				list-style: none;
+			}
+
+			.main {
+				z-index: 10;
+				position: absolute;
+				top: 30px;
+				margin: 0 50px 0 50px;
+				font-size: 14px;
+				font-family: 'Microsoft Yahei', '微软雅黑', 'Simsun', '宋体', 'Arial', sans-serif;
+			}
+
+			.head-nav {
+				width: 90%;
+				height: 60px;
+				background: #e89e8b;
+				color: #777;
+			}
+
+			.head-nav-con {
+				width: 1000px;
+				height: 60px;
+				margin: auto;
+			}
+
+			.head-nav-con ul li {
+				width: 160px;
+				float: left;
+				font-size: 20px;
+				text-align: center;
+			}
+
+			.head-nav-con ul li:hover {
+				background: #d64a4c;
+			}
+
+			.head-nav-con ul a {
+				display: block;
+				text-decoration: none;
+				text-align: center;
+				line-height: 60px;
+				color: white;
+			}
+
+			.head-nav-con .drop-down {
+				position: relative;
+			}
+
+			.head-nav-con .drop-down-content {
+				padding: 0;
+				display: none;
+				position: absolute;
+				z-index: 1;
+				background: #d62f37;
+			}
+
+			.head-nav-con .drop-down-content li:hover>a {
+				background-color: rgb(123, 194, 122);
+			}
+
+			.head-nav-con .drop-down:hover .drop-down-content {
+				display: block;
+			}
+
+
+
+			.tijiao {
+				background: #ff6600;
+				border: 0;
+				margin: 0;
+				padding: 5px 20px;
+				color: #fff;
+				font-weight: bold;
+				border-radius: 3px;
+				cursor: pointer;
+			}
+
+			button {
+				width: 50px;
+				padding: 8px;
+				background-color: #428bca;
+				border-color: #357ebd;
+				color: #fff;
+				cursor: pointer;
+				-moz-border-radius: 10px;
+				-webkit-border-radius: 10px;
+				border-radius: 10px;
+				/* future proofing */
+				-khtml-border-radius: 10px;
+				/* for old Konqueror browsers */
+				text-align: center;
+				vertical-align: middle;
+				border: 1px solid transparent;
+				font-weight: 900;
+				font-size: 70%;
+			}
+
+			button:active {
+				background-color: #456990;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="head-nav">
+				<div class="head-nav-con clearFloat">
+					<ul>
+						<li><a onclick="getlocation();getdata();getdata2();display('tuli')">首页</a></li>
+						<li class="drop-down"><a href="#">长征路线</a>
+							<ul class="drop-down-content">
+								<li id="red1army"><a href="#" onclick="test();">红一方面军</a>
+
+								</li>
+								<li id="red24army"><a href="#">红二、四方面军</a></li>
+								<li id="red6army"><a href="#">红六方面军</a></li>
+							</ul>
+						</li>
+						<li class="drop-down"><a href="#"
+								onclick="window.open('http://127.0.0.1:8848/Changzheng/xuliebiao.html');">红军序列表</a>
+							<!-- <ul class="drop-down-content">
+								<li><a href="#">二级菜单</a></li>
+								<li><a href="#">二级菜单</a></li>
+								<li><a href="#">二级菜单</a></li>
+								<li><a href="#">二级菜单</a></li>
+							</ul> -->
+						</li>
+						<li class="drop-down"><a href="#">长征</a>
+							<ul class="drop-down-content">
+								<li class="" id="btn1"><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+							</ul>
+						</li>
+						<li class="drop-down"><a href="#">长征</a>
+							<ul class="drop-down-content">
+								<li class=""><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+								<li class=""><a href="#">二级菜单</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div id="map"></div>
+
+		<div id="tuli" style="display:none">
+			<div class="clear" onclick="this.parentNode.style.display='none'">X</div>
+			<img src="img/图例.png" style="width:220px;height:130px; ">
+		</div>
+
+		<div id="tuli_fs" style="display:none">
+			<div class="clear" onclick="this.parentNode.style.display='none'">X</div>
+			<img src="img/图例_fs.png" style="width:220px;height:150px; ">
+		</div>
+
+
+		<!-- 时间轴 -->
+		<div id="time-line" style="height: 500px;">
+			<!-- 简介 -->
+			<section class="intro">
+				<div class="container">
+					<h1>红一方面军长征时间线</h1>
+				</div>
+			</section>
+
+			<!-- 时间轴内容 -->
+			<section class="timeline"">
+				<ul>
+					<li>
+						<div>
+							<time>1934年1月</time>
+							<a href=" #">于都</a>
+
+		</div>
+		</li>
+		<li>
+			<div>
+				<time>1934年11月 &nbsp &nbsp <button id="btn-tupo"
+						onclick="window.open('http://127.0.0.1:8848/jquery%E6%BB%9A%E5%8A%A8%E5%9B%BA%E5%AE%9A%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%8F%92%E4%BB%B6/index.html');">详情</button></time>
+				<a href="#" onclick="getdata3();getlocation2();getdata4();getdata5();display('tuli_fs')">突破四道防线</a>
+
+			</div>
+		</li>
+		<li>
+			<div>
+				<time>1934年12月12日</time>
+				<a href="#">通道会议</a>
+
+			</div>
+		</li>
+		<li>
+			<div>
+				<time>1935年1月15日-17日</time>
+				<a href="#">遵义会议</a>
+
+			</div>
+		</li>
+		<li>
+			<div>
+				<time>1935年1月-4月</time>
+				<a href="#">四渡赤水</a>
+
+			</div>
+		</li>
+		<li>
+			<div>
+				<time>1935年5月</time>
+				<a href="#">巧渡金沙江</a>
+
+			</div>
+		</li>
+
+
+		</ul>
+		</section>
+		</div>
+		<script>
+			/**
+			 * 智图地图内容
+			 */
+			var normalm1 = L.tileLayer.chinaProvider('Geoq.Normal.Map', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var normalm2 = L.tileLayer.chinaProvider('Geoq.Normal.Color', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var normalm3 = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var normalm5 = L.tileLayer.chinaProvider('Geoq.Normal.Warm', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var normalm6 = L.tileLayer.chinaProvider('Geoq.Normal.Cold', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			/**
+			 * 天地图内容
+			 */
+			var normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+					maxZoom: 18,
+					minZoom: 5
+				}),
+				normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+					maxZoom: 18,
+					minZoom: 5
+				}),
+				imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+					maxZoom: 18,
+					minZoom: 5
+				}),
+				imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+					maxZoom: 18,
+					minZoom: 5
+				});
+
+			var normal = L.layerGroup([normalm, normala]),
+				image = L.layerGroup([imgm, imga]);
+			/**
+			 * 谷歌
+			 */
+			var normalMap = L.tileLayer.chinaProvider('Google.Normal.Map', {
+					maxZoom: 18,
+					minZoom: 5
+				}),
+				satelliteMap = L.tileLayer.chinaProvider('Google.Satellite.Map', {
+					maxZoom: 18,
+					minZoom: 5
+				});
+			/**
+			 * 高德地图
+			 */
+			var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var Gaodimgem = L.tileLayer.chinaProvider('GaoDe.Satellite.Map', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var Gaodimga = L.tileLayer.chinaProvider('GaoDe.Satellite.Annotion', {
+				maxZoom: 18,
+				minZoom: 5
+			});
+			var Gaodimage = L.layerGroup([Gaodimgem, Gaodimga]);
+
+
+
+			var baseLayers = {
+				"智图地图": normalm1,
+				"智图多彩": normalm2,
+				"智图午夜蓝": normalm3,
+				"智图灰色": normalm4,
+				"智图暖色": normalm5,
+				"智图冷色": normalm6,
+				"天地图": normal,
+				"天地图影像": image,
+				"谷歌地图": normalMap,
+				"谷歌影像": satelliteMap,
+				"高德地图": Gaode,
+				"高德影像": Gaodimage,
+
+			}
+
+			var map = L.map("map", {
+				center: [33, 110],
+				zoom: 6,
+				layers: [Gaode],
+				zoomControl: true
+			});
+
+			var marker = L.marker([25.9518, 115.4154]).addTo(map);
+
+
+
+			var btn1=document.getElementById('btn1');
+			
+			btn1.addEventListener("click",function(){
+				move();
+			});
+
+			L.control.layers(baseLayers, null).addTo(map);
+			
+			// L.control.zoom({
+			// 	zoomInTitle: '放大',
+			// 	zoomOutTitle: '缩小'
+			// }).addTo(map);
+
+			(function() {
+				"use strict";
+				var items = document.querySelectorAll(".timeline li");
+
+				function isElementInViewport(el) {
+					var rect = el.getBoundingClientRect();
+					return (
+						rect.top >= 0 &&
+						rect.left >= 0 &&
+						rect.bottom <=
+						(window.innerHeight || document.documentElement.clientHeight) &&
+						rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+					);
+				}
+
+				function callbackFunc() {
+					for (var i = 0; i < items.length; i++) {
+						if (isElementInViewport(items[i])) {
+							items[i].classList.add("in-view");
+						}
+					}
+				}
+				// 当页面加载、大小变化和滚动时调用函数
+				window.addEventListener("mouseover", callbackFunc);
+				window.addEventListener("load", callbackFunc);
+			})();
+		</script>
+	</body>
+</html>
